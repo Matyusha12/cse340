@@ -4,3 +4,19 @@
 *:after {
   box-sizing: border-box;
 }
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+.delorean img {
+  width: 100%;
+  height: auto;
+}
+
+@media (min-width: 768px) {
+  .delorean img {
+      width: 50%;
+  }
+}
+
