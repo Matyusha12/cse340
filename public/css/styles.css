@@ -5,18 +5,210 @@
   box-sizing: border-box;
 }
 
+#top-header{
+  color: black;
+}
+
+.siteName {
+  color: rgb(19, 18, 18);         
+  font-weight: bold;   
+  font-size: 20px;     
+  padding-right: 90%;
+}
+
+#wrapper{
+  content: normal;
+
+}
+#tools{
+ text-align: right;
+ margin-bottom: 10px;
+}
+
 body {
   font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.content-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -3; /* Помещаем фон за все остальные элементы */
+  background-image: url('/images/site/checkerboard.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: none;
+}
+
+header {
+  background-color: #eae8e8;
+  color: white;
+  padding: 10px 0;
+}
+
+nav {
+  background-color: #111111; /* Черный фон */
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+}
+
+header, nav {
+  position: relative; /* Если нужно контролировать через z-index */
+  z-index: 3; /* Убедитесь, что это значение выше, чем у .content-wrapper */
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+ } 
+
+ nav ul li {
+  margin: 0 15px;
+} 
+
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.main-container {
+  position: relative;
+  z-index: 2; /* Убедитесь, что это значение выше, чем у .content-wrapper */
+  max-width: 1000px;
+  margin: 20px auto; /* Добавлено небольшое пространство сверху для видимости */
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  border: 4px solid #06c9f7;
+}
+
+section {
+  margin-bottom: 20px;
+}
+.delorean {
+    position: relative;
+    text-align: center;
+    margin-top: 20px;
 }
 
 .delorean img {
-  width: 100%;
-  height: auto;
+    width: 80%;
+    height: auto;
+    padding-right:10%;
 }
 
-@media (min-width: 768px) {
-  .delorean img {
-      width: 50%;
+.delorean .banner {
+    position: absolute;
+    top: 50%; /* Центрируем баннер по вертикали */
+    left: 35%;
+    transform: translate(-50%, -50%); /* Сдвигаем баннер, чтобы точно центрировать его относительно изображения */
+    width: 30%; /* Ширина баннера относительно ширины изображения */
+    background: rgba(163, 159, 159, 0.5); /* Полупрозрачный черный фон для текста и кнопки */
+    color: rgb(20, 196, 227);
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 10px; /* Скругление углов баннера */
+    text-align: center;
+}
+
+.delorean ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0; /* Отступ снизу для списка */
+}
+
+.delorean button {
+    background-color: rgb(20, 196, 227);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.content {
+  display: flex;
+  flex-wrap: nowrap; /* Позволяет элементам переноситься на следующую строку */
+  justify-content: space-between; /* Равномерно распределяет пространство между элементами */
+  align-items: stretch; /* Выравнивает элементы по верху */
+}
+
+.upgrades, .reviews {
+  flex: 1 1 48%; /* Проверьте, достаточно ли места для этих блоков */
+  margin: 10px;
+  padding: 10px;
+  background-color: #f1f1f1;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.upgrade-item, .reviews ul {
+  margin: 20px;
+  padding: 20px;
+  list-style: none; /* Убираем маркеры списка для элементов upgrade-item и reviews */
+ 
+}
+
+.upgrade-item img, .reviews ul li {
+  width: 50%; /* Полная ширина контейнера для изображений */
+  height: auto; /* Автоматическая высота сохраняет пропорции изображений */
+}
+
+.upgrades {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);  
+  grid-gap: 20px;
+}
+
+.upgrade-item {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding: 10px;
+  background-color: rgb(29, 231, 242);
+}
+
+.upgrade-item img {
+  width: 80px; /* Конкретная ширина */
+  height: auto; /* Высота автоматически, сохраняя пропорции */
+  margin-right: 10px; /* Отступ справа от изображения */
+}
+
+.upgrade-item .a {
+text-wrap: wrap;
+}
+/* Адаптивное поведение для мобильных устройств */
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+  }
+
+  .upgrades, .reviews {
+    flex: 1 1 100%; /* Позволяет каждому блоку занимать полную ширину */
+  }
+  @media (max-width: 768px) {
+    .upgrades {
+      grid-template-columns: 1fr; /* Один столбец для мобильных устройств */
+      grid-template-rows: auto; /* Строки регулируются автоматически */
+    }
+  }
+  .upgrades {
+    grid-template-columns: 1fr; /* Один столбец для мобильных устройств */
   }
 }
-
