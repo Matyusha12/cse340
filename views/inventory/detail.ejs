@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= vehicle.make %> <%= vehicle.model %></title>
+</head>
+<body>
+    <h1><%= vehicle.make %> <%= vehicle.model %></h1>
+    <img src="<%= vehicle.full_size_image %>" alt="Image of <%= vehicle.make %> <%= vehicle.model %>">
+    <p>Model Year: <%= vehicle.year %></p>
+    <p>Price: $<%= vehicle.price.toLocaleString() %></p>
+    <p>Mileage: <%= vehicle.mileage.toLocaleString() %> miles</p>
+    <p>Description: <%= vehicle.description %></p>
+</body>
+</html>
