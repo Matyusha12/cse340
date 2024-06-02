@@ -30,7 +30,7 @@ invCont.displayInventoryDetail = async (req, res, next) => {
       return res.status(404).send('Vehicle not found');
     }
     res.render("inventory/detail", {
-      title: `${vehicle.make} ${vehicle.model}`,
+      title: `${vehicle.inv_make} ${vehicle.inv_model}`,
       vehicle,
     });
   } catch (error) {

@@ -77,6 +77,5 @@ module.exports = {
   getNav: Util.getNav,
   handleErrors: Util.handleErrors,
   buildClassificationGrid: Util.buildClassificationGrid,
-  buildClassificationList,  
- 
+  buildClassificationList, 
 };
