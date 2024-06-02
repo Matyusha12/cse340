@@ -59,28 +59,6 @@ invCont.buildAddClassification = async function(req, res, next) {
   });
 }
 
-// Build add inventory view
-invCont.buildAddInventory = async function(req, res, next) {
-  let nav = await utilities.getNav();
-  const classificationList = await utilities.buildClassificationList();
-  res.render("inventory/add-inventory", {
-      title: "Add Inventory",
-      nav,
-      errors: null,
-      classificationList,
-      classification_id: '',
-      inv_make: '',
-      inv_model: '',
-      inv_year: '',
-      inv_description: '',
-      inv_image: '',
-      inv_thumbnail: '',
-      inv_price: '',
-      inv_miles: '',
-      inv_color: ''
-  });
-}
-
 // Add classification to the database
 invCont.addClassification = async function(req, res, next) {
   let nav = await utilities.getNav();
@@ -121,6 +99,28 @@ invCont.addClassification = async function(req, res, next) {
           classification_name
       });
   }
+}
+
+// Build add inventory view
+invCont.buildAddInventory = async function(req, res, next) {
+  let nav = await utilities.getNav();
+  const classificationList = await utilities.buildClassificationList();
+  res.render("inventory/add-inventory", {
+      title: "Add Inventory",
+      nav,
+      errors: null,
+      classificationList,
+      classification_id: '',
+      inv_make: '',
+      inv_model: '',
+      inv_year: '',
+      inv_description: '',
+      inv_image: '',
+      inv_thumbnail: '',
+      inv_price: '',
+      inv_miles: '',
+      inv_color: ''
+  });
 }
 
 // Add inventory to the database

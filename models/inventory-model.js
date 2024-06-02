@@ -55,10 +55,27 @@ async function addInventory(inventory) {
   }
 }
 
+/* ***************************
+ *  Add new classification
+ * ************************** */
+async function addClassification(classification_name) {
+  try {
+    const result = await pool.query(
+      `INSERT INTO public.classification (classification_name)
+       VALUES ($1)`,
+      [classification_name]
+    );
+    return result.rowCount > 0;
+  } catch (error) {
+    console.error('addClassification error ' + error);
+    return false;
+  }
+}
+
 module.exports = {
   getClassifications,
   getInventoryByClassificationId,
   getInventoryById,
-  addInventory
+  addInventory,
+  addClassification
 };
-
