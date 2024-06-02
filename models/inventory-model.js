@@ -3,7 +3,7 @@ const pool = require("../database/")
 /* ***************************
  *  Get all classification data
  * ************************** */
-async function getClassifications(){
+async function getClassifications() {
   return await pool.query("SELECT * FROM public.classification ORDER BY classification_name")
 }
 
@@ -21,14 +21,44 @@ async function getInventoryByClassificationId(classification_id) {
     )
     return data.rows
   } catch (error) {
-    console.error("getclassificationsbyid error " + error)
+    console.error("getInventoryByClassificationId error " + error)
   }
 }
 
+/* ***************************
+ *  Get inventory item by id
+ * ************************** */
 async function getInventoryById(inventoryId) {
-  const { rows } = await pool.query('SELECT * FROM inventory WHERE id = $1', [inventoryId]);
-  return rows[0];
+  try {
+    const { rows } = await pool.query('SELECT * FROM inventory WHERE id = $1', [inventoryId]);
+    return rows[0];
+  } catch (error) {
+    console.error("getInventoryById error " + error);
+  }
 }
 
-module.exports = {getClassifications, getInventoryByClassificationId};
+/* ***************************
+ *  Add new inventory item
+ * ************************** */
+async function addInventory(inventory) {
+  const { classification_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color } = inventory;
+  try {
+    const result = await pool.query(
+      `INSERT INTO public.inventory (classification_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+      [classification_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color]
+    );
+    return result.rowCount > 0;
+  } catch (error) {
+    console.error('addInventory error ' + error);
+    return false;
+  }
+}
+
+module.exports = {
+  getClassifications,
+  getInventoryByClassificationId,
+  getInventoryById,
+  addInventory
+};
 

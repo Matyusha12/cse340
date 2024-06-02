@@ -9,12 +9,14 @@ router.get('/', invController.buildManagement);
 
 // Route to display inventory detail
 router.get("/detail/:inventoryId", invController.displayInventoryDetail);
+
+// Route to build add classification view and post classification
 router.get('/add-classification', invController.buildAddClassification);
 router.post('/add-classification', [
     body('classification_name').isAlphanumeric().withMessage('Classification name must contain only letters and numbers.')
 ], invController.addClassification);
 
-// Добавление инвентаря
+// Route to build add inventory view and post inventory
 router.get('/add-inventory', invController.buildAddInventory);
 router.post('/add-inventory', [
     body('classification_id').isNumeric().withMessage('Classification is required.'),
@@ -30,4 +32,3 @@ router.post('/add-inventory', [
 ], invController.addInventory);
 
 module.exports = router;
-

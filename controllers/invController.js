@@ -1,6 +1,6 @@
 const utilities = require("../utilities/");
 const inventoryModel = require('../models/inventory-model');
-const { body, validationResult } = require('express-validator');
+const { validationResult } = require('express-validator');
 
 const invCont = {};
 
@@ -62,10 +62,12 @@ invCont.buildAddClassification = async function(req, res, next) {
 // Build add inventory view
 invCont.buildAddInventory = async function(req, res, next) {
   let nav = await utilities.getNav();
+  const classificationList = await utilities.buildClassificationList();
   res.render("inventory/add-inventory", {
       title: "Add Inventory",
       nav,
       errors: null,
+      classificationList,
       classification_id: '',
       inv_make: '',
       inv_model: '',
