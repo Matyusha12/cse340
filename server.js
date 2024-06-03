@@ -19,6 +19,7 @@ const session = require("express-session");
 const pool = require('./database/');
 const bodyParser = require("body-parser");
 const flash = require('connect-flash');
+const cookieParser = require("cookie-parser");
 
 /* ***********************
  * Middleware
@@ -35,6 +36,8 @@ app.use(session({
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(utilities.checkJWTToken)
 
 // Express Messages Middleware
 app.use(flash());
