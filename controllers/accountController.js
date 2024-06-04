@@ -127,5 +127,18 @@ async function accountLogin(req, res) {
    return new Error('Access Forbidden')
   }
  }
-
-module.exports = { buildLogin, buildRegister, registerAccount, accountLogin };
+/* ****************************************
+ *  Deliver account management view
+ * ************************************ */
+async function buildManagement(req, res, next) {
+  let nav = await utilities.getNav();
+  res.render("account/management", {
+    title: "Account Management",
+    nav,
+    errors: null,
+    account_firstname: res.locals.accountData.account_firstname,
+    account_lastname: res.locals.accountData.account_lastname,
+    account_email: res.locals.accountData.account_email
+  });
+}
+module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildManagement };

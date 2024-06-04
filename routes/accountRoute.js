@@ -33,6 +33,9 @@ router.post(
   utilities.handleErrors(accountController.accountLogin)
 )
 
+// Deliver account management view
+router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.buildManagement));
+
 // Trigger a test error
 router.get("/trigger-error", (req, res, next) => {
   try {
