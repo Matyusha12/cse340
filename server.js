@@ -14,7 +14,6 @@ const baseController = require("./controllers/baseController");
 const inventoryRoute = require("./routes/inventoryRoute");
 const accountRoute = require("./routes/accountRoute");
 const utilities = require("./utilities/index");
-const errorRoutes = require('./routes/errorRoutes');
 const session = require("express-session");
 const pool = require('./database/');
 const bodyParser = require("body-parser");
@@ -37,7 +36,7 @@ app.use(session({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(utilities.checkJWTToken)
+app.use(utilities.checkJWTToken);
 
 // Express Messages Middleware
 app.use(flash());
@@ -79,12 +78,8 @@ app.use(async (req, res, next) => {
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav();
   console.error(`Error at: "${req.originalUrl}": ${err.message}`);
-  if (err.status == 404) {
-    message = err.message;
-  } else {
-    message = 'Oh no! There was a crash. Maybe try a different route?';
-  }
-  res.render("errors/error", {
+  const message = err.status == 404 ? err.message : 'Oh no! There was a crash. Maybe try a different route?';
+  res.status(err.status || 500).render("errors/error", {
     title: err.status || 'Server Error',
     message,
     nav
@@ -95,8 +90,8 @@ app.use(async (err, req, res, next) => {
  * Local Server Information
  * Values from .env (environment) file
  *************************/
-const port = process.env.PORT;
-const host = process.env.HOST;
+const port = process.env.PORT || 3000;
+const host = process.env.HOST || 'localhost';
 
 /* ***********************
  * Log statement to confirm server operation

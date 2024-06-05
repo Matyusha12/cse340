@@ -9,24 +9,29 @@ const Util = {};
  * Constructs the nav HTML unordered list
  ************************** */
 Util.getNav = async function () {
-  let data = await invModel.getClassifications();
-  console.log(data);
-  let list = "<ul>";
-  list += '<li><a href="/" title="Home page">Home</a></li>';
-  data.rows.forEach((row) => {
-    list += "<li>";
-    list +=
-      '<a href="/inv/type/' +
-      row.classification_id +
-      '" title="See our inventory of ' +
-      row.classification_name +
-      ' vehicles">' +
-      row.classification_name +
-      "</a>";
-    list += "</li>";
-  });
-  list += "</ul>";
-  return list;
+  try {
+    let data = await invModel.getClassifications();
+    console.log(data);
+    let list = "<ul>";
+    list += '<li><a href="/" title="Home page">Home</a></li>';
+    data.forEach((row) => {
+      list += "<li>";
+      list +=
+        '<a href="/inv/type/' +
+        row.classification_id +
+        '" title="See our inventory of ' +
+        row.classification_name +
+        ' vehicles">' +
+        row.classification_name +
+        "</a>";
+      list += "</li>";
+    });
+    list += "</ul>";
+    return list;
+  } catch (err) {
+    console.error('Error fetching navigation data', err);
+    throw err;
+  }
 };
 
 Util.handleErrors = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
@@ -109,7 +114,7 @@ Util.checkLogin = (req, res, next) => {
     req.flash("notice", "Please log in.")
     return res.redirect("/account/login")
   }
- }
+}
 
 module.exports = {
   getNav: Util.getNav,
