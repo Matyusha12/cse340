@@ -5,21 +5,21 @@ const utilities = require("../utilities");
 const { body } = require('express-validator');
 
 // Route to build inventory by classification view
-router.get("/type/:classificationId", utilities.handleErrors(invController.buildByClassificationId));
-router.get('/', utilities.handleErrors(invController.buildManagement));
+router.get("/type/:classificationId", invController.buildByClassificationId);
+router.get('/', invController.buildManagement);
 router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON));
 
 // Route to display inventory detail
-router.get("/detail/:inventoryId", utilities.handleErrors(invController.displayInventoryDetail));
+router.get("/detail/:inventoryId", invController.displayInventoryDetail);
 
 // Route to build add classification view and post classification
-router.get('/add-classification', utilities.handleErrors(invController.buildAddClassification));
+router.get('/add-classification', invController.buildAddClassification);
 router.post('/add-classification', [
     body('classification_name').isAlphanumeric().withMessage('Classification name must contain only letters and numbers.')
-], utilities.handleErrors(invController.addClassification));
+], invController.addClassification);
 
 // Route to build add inventory view and post inventory
-router.get('/add-inventory', utilities.handleErrors(invController.buildAddInventory));
+router.get('/add-inventory', invController.buildAddInventory);
 router.post('/add-inventory', [
     body('classification_id').isNumeric().withMessage('Classification is required.'),
     body('inv_make').notEmpty().withMessage('Make is required.'),
@@ -31,9 +31,9 @@ router.post('/add-inventory', [
     body('inv_price').isNumeric().withMessage('Price is required.'),
     body('inv_miles').isNumeric().withMessage('Miles is required.'),
     body('inv_color').notEmpty().withMessage('Color is required.')
-], utilities.handleErrors(invController.addInventory));
+], invController.addInventory);
 
-// Route to edit inventory item
+// Route to build edit inventory view
 router.get("/edit/:inv_id", utilities.handleErrors(invController.editInventoryView));
 
 // Route to handle inventory update
@@ -49,5 +49,11 @@ router.post("/update", [
     body('inv_miles').isNumeric().withMessage('Miles is required.'),
     body('inv_color').notEmpty().withMessage('Color is required.')
 ], utilities.handleErrors(invController.updateInventory));
+
+// Route to build delete confirmation view
+router.get("/delete/:inv_id", utilities.handleErrors(invController.buildDeleteConfirmationView));
+
+// Route to handle inventory delete
+router.post("/delete", utilities.handleErrors(invController.deleteInventory));
 
 module.exports = router;

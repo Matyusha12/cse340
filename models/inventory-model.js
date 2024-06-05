@@ -1,16 +1,10 @@
-const pool = require("../database");
+const pool = require("../database/")
 
 /* ***************************
  *  Get all classification data
  * ************************** */
 async function getClassifications() {
-  try {
-    const result = await pool.query("SELECT * FROM public.classification ORDER BY classification_name");
-    return result.rows;
-  } catch (error) {
-    console.error("Error fetching classifications", error);
-    throw error;
-  }
+  return await pool.query("SELECT * FROM public.classification ORDER BY classification_name")
 }
 
 /* ***************************
@@ -18,17 +12,16 @@ async function getClassifications() {
  * ************************** */
 async function getInventoryByClassificationId(classification_id) {
   try {
-    const result = await pool.query(
+    const data = await pool.query(
       `SELECT * FROM public.inventory AS i 
       JOIN public.classification AS c 
       ON i.classification_id = c.classification_id 
       WHERE i.classification_id = $1`,
       [classification_id]
-    );
-    return result.rows;
+    )
+    return data.rows
   } catch (error) {
-    console.error("getInventoryByClassificationId error " + error);
-    throw error;
+    console.error("getInventoryByClassificationId error " + error)
   }
 }
 
@@ -37,11 +30,10 @@ async function getInventoryByClassificationId(classification_id) {
  * ************************** */
 async function getInventoryById(inventoryId) {
   try {
-    const result = await pool.query('SELECT * FROM inventory WHERE inv_id = $1', [inventoryId]);
-    return result.rows[0];
+    const { rows } = await pool.query('SELECT * FROM inventory WHERE inv_id = $1', [inventoryId]);
+    return rows[0];
   } catch (error) {
     console.error("getInventoryById error " + error);
-    throw error;
   }
 }
 
@@ -59,7 +51,7 @@ async function addInventory(inventory) {
     return result.rowCount > 0;
   } catch (error) {
     console.error('addInventory error ' + error);
-    throw error;
+    return false;
   }
 }
 
@@ -76,7 +68,7 @@ async function addClassification(classification_name) {
     return result.rowCount > 0;
   } catch (error) {
     console.error('addClassification error ' + error);
-    throw error;
+    return false;
   }
 }
 
@@ -119,11 +111,27 @@ async function updateInventory(
   }
 }
 
+/* ***************************
+ *  Delete Inventory Item
+ * ************************** */
+async function deleteInventoryItem(inv_id) {
+  try {
+    const sql = 'DELETE FROM inventory WHERE inv_id = $1'
+    const data = await pool.query(sql, [inv_id])
+    return data
+  } catch (error) {
+    console.error("deleteInventoryItem error: " + error);
+    throw error;
+  }
+}
+
+
 module.exports = {
   getClassifications,
   getInventoryByClassificationId,
   getInventoryById,
   addInventory,
   addClassification,
-  updateInventory
+  updateInventory,
+  deleteInventoryItem
 };

@@ -9,29 +9,27 @@ const Util = {};
  * Constructs the nav HTML unordered list
  ************************** */
 Util.getNav = async function () {
-  try {
-    let data = await invModel.getClassifications();
-    console.log(data);
-    let list = "<ul>";
-    list += '<li><a href="/" title="Home page">Home</a></li>';
-    data.forEach((row) => {
-      list += "<li>";
-      list +=
-        '<a href="/inv/type/' +
-        row.classification_id +
-        '" title="See our inventory of ' +
-        row.classification_name +
-        ' vehicles">' +
-        row.classification_name +
-        "</a>";
-      list += "</li>";
-    });
-    list += "</ul>";
-    return list;
-  } catch (err) {
-    console.error('Error fetching navigation data', err);
-    throw err;
+  let data = await invModel.getClassifications();
+  console.log(data);
+  if (!data || !Array.isArray(data.rows) || data.rows.length === 0) {
+    throw new Error("No classifications found");
   }
+  let list = "<ul>";
+  list += '<li><a href="/" title="Home page">Home</a></li>';
+  data.rows.forEach((row) => {
+    list += "<li>";
+    list +=
+      '<a href="/inv/type/' +
+      row.classification_id +
+      '" title="See our inventory of ' +
+      row.classification_name +
+      ' vehicles">' +
+      row.classification_name +
+      "</a>";
+    list += "</li>";
+  });
+  list += "</ul>";
+  return list;
 };
 
 Util.handleErrors = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
@@ -114,13 +112,15 @@ Util.checkLogin = (req, res, next) => {
     req.flash("notice", "Please log in.")
     return res.redirect("/account/login")
   }
-}
+ }
 
-module.exports = {
-  getNav: Util.getNav,
-  handleErrors: Util.handleErrors,
-  buildClassificationGrid: Util.buildClassificationGrid,
-  buildClassificationList: Util.buildClassificationList,
-  checkJWTToken: Util.checkJWTToken,
-  checkLogin: Util.checkLogin
+ Util.checkAccountType = (req, res, next) => {
+  if (res.locals.accountData && (res.locals.accountData.account_type === 'Employee' || res.locals.accountData.account_type === 'Admin')) {
+    next();
+  } else {
+    req.flash('notice', 'You do not have access to this resource.');
+    res.redirect('/account/login');
+  }
 };
+
+module.exports = Util;
