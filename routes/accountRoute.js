@@ -18,7 +18,7 @@ router.get("/login", utilities.handleErrors(accountController.buildLogin));
 // Deliver Registration View
 router.get("/register", utilities.handleErrors(accountController.buildRegister));
 
-// Process the registration data
+// Process the registration data 
 router.post(
   "/register",
   regValidate.registrationRules(), // Using the correct function name
