@@ -1,9 +1,3 @@
 
-<body>
-    <h1><%= vehicle.make %> <%= vehicle.model %></h1>
-    <img src="<%= vehicle.full_size_image %>" alt="Image of <%= vehicle.make %> <%= vehicle.model %>">
-    <p>Model Year: <%= vehicle.year %></p>
-    <p>Price: $<%= vehicle.price.toLocaleString() %></p>
-    <p>Mileage: <%= vehicle.mileage.toLocaleString() %> miles</p>
-    <p>Description: <%= vehicle.description %></p>
-</body>
+<%- messages() %>
+<%- detail %>

@@ -1,16 +1,9 @@
 const express = require("express");
 const router = new express.Router();
 const accountController = require("../controllers/accountController");
-const invController = require("../controllers/invController");
 const utilities = require("../utilities");
 const regValidate = require('../utilities/account-validation');
-const { body } = require('express-validator'); // Added to fix the error
-
-// Route to build inventory by classification view
-router.get("/type/:classificationId", invController.buildByClassificationId);
-
-// Route to display inventory detail
-router.get("/detail/:inventoryId", invController.displayInventoryDetail);
+const { body } = require('express-validator');
 
 // Deliver Login View
 router.get("/login", utilities.handleErrors(accountController.buildLogin));
@@ -18,10 +11,10 @@ router.get("/login", utilities.handleErrors(accountController.buildLogin));
 // Deliver Registration View
 router.get("/register", utilities.handleErrors(accountController.buildRegister));
 
-// Process the registration data 
+// Process the registration data
 router.post(
   "/register",
-  regValidate.registrationRules(), // Using the correct function name
+  regValidate.registrationRules(),
   regValidate.checkRegData,
   utilities.handleErrors(accountController.registerAccount)
 );
@@ -32,7 +25,7 @@ router.post(
   regValidate.loginRules(),
   regValidate.checkLoginData,
   utilities.handleErrors(accountController.accountLogin)
-)
+);
 
 // Deliver account management view
 router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.buildManagement));

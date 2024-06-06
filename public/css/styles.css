@@ -1,301 +1,339 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
 /******* Change Box Model ***************/
 *,
 *:before,
 *:after {
   box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+#background {
+  display: none;
 }
-
-/* Top Header */
 #top-header {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  margin-top: 50px;}
+
+  #nav_ul {
+    display: flex;
+    justify-content: space-around;
+    padding: 0;
+    margin: 0;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: black;
+    list-style: none;
+  }
+  
+  #nav_ul li {
+    padding: 4px;
+    list-style: none;
+  }
+  
+  #nav_ul a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+  }
+  
+  #nav_ul a:hover {
+    background-color: gray;
+  }
+
+h2 {
+  font-family: "Merriweather", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+.float{
+  position: relative;
+}
+.float img {
+  width: 80%;
+  margin-left: 80px;
+}
+#parent-floater {
+  position: absolute;
+  top: 5px;
+  background-color: rgba(192, 192, 192, 0.5);
+  width: 30%;
+  color: #1F4BFF;
+}
+#parent-floater img {
+  width: 50%;
+  margin-left: 0;
+}
+h3 {
+  font-family: "Merriweather", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+#reviews {
+  line-height: 3;
+}
+.upgrades img {
+  padding: 10px;
+  background-color: #1F4BFF;
+  padding-left: 15px;
+  padding-right: 15px;
+  height: 80%;
+}
+.upgrades {
+  display: flex;
+  flex-direction: column;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 9px;
+}
+#grid1 {
+  grid-column: 1/2;
+}
+#grid2 {
+  grid-column: 2/3;
+}
+header a {
+  text-decoration: none;
   color: black;
 }
-
-.siteName {
-  color: rgb(19, 18, 18);         
-  font-weight: bold;   
-  font-size: 20px;     
-  padding-right: 90%;
+h1 {
+  font-weight: 700;
 }
-
-#wrapper {
-  content: normal;
-}
-
-#tools {
-  text-align: right;
-  margin-bottom: 10px;
-}
-
-/* Content Wrapper */
-.content-wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -3; 
-  background-image: url('/images/site/checkerboard.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  border: none;
-}
-
-/* Header and Navigation */
-header {
-  background-color: #eae8e8;
-  color: white;
-  padding: 10px 0;
-}
-
-nav {
-  background-color: #111111; 
-  color: white;
-  padding: 10px 0;
+.upgrades a {
   text-align: center;
 }
-
-header, nav {
-  position: relative; 
-  z-index: 3; 
+#inline {
+  display: inline-block;
 }
+#inlines {
+  display: inline-block;
+}
+#inliness {
+  display: inline-block;
+}
+.datailimages { 
+  width: 80% ;
+  margin-left: 60px;
+}
+.price {
+  background-color: aliceblue;
+  padding: 10px;
+}
+/* login-form */
 
-nav ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.background {
+  width: 60%;
+  height: 60vh;
+  background-color: aqua;
   display: flex;
-  justify-content: space-around;
-  align-items: center;
+  justify-content: center;
 }
-
-nav ul li {
-  margin: 0 15px;
-}
-
-nav ul li a {
-  color: white;
-  text-decoration: none;
-  font-size: 16px;
-}
-
-/* Main Container */
-.main-container {
-  position: relative;
-  z-index: 2; 
-  max-width: 1000px;
-  margin: 20px auto; 
-  padding: 20px;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  border: 4px solid #06c9f7;
-}
-
-section {
-  margin-bottom: 20px;
-}
-
-/* DeLorean Section */
-.delorean {
-  position: relative;
-  text-align: center;
-  margin-top: 20px;
-}
-
-.delorean img {
+.background form {
+  display: flex;
+  flex-direction: column;
   width: 80%;
-  height: auto;
-  padding-right: 10%;
-}
-
-.delorean .banner {
-  position: absolute;
-  top: 50%; 
-  left: 35%;
-  transform: translate(-50%, -50%); 
-  width: 30%; 
-  background: rgba(163, 159, 159, 0.5);
-  color: rgb(20, 196, 227);
-  padding: 20px;
-  box-sizing: border-box;
-  border-radius: 10px; 
-  text-align: center;
-}
-
-.delorean ul {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 20px 0; 
-}
-
-.delorean button {
-  background-color: rgb(20, 196, 227);
+  background-color: blue;
+  font-weight: 500;
   color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-/* Content */
-.content {
-  display: flex;
-  flex-wrap: nowrap; 
-  justify-content: space-between; 
-  align-items: stretch; 
-}
-
-.upgrades, .reviews {
-  flex: 1 1 48%; 
-  margin: 10px;
-  padding: 10px;
-  background-color: #f1f1f1;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.upgrade-item, .reviews ul {
-  margin: 20px;
-  padding: 20px;
-  list-style: none;
-}
-
-.upgrade-item img, .reviews ul li {
-  width: 50%; 
-  height: auto; 
-}
-
-.upgrades {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);  
-  grid-gap: 20px;
-}
-
-.upgrade-item {
-  display: flex;
   align-items: center;
-  justify-content: start;
-  padding: 10px;
-  background-color: rgb(29, 231, 242);
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+.background label {
+  align-self: flex-start;
+  margin-left: 30px;
+  margin-top: 15px;
+}
+.background input {
+ height: 45px;
+ width: 90%;
+}
+.background form a {
+  color: coral;
 }
 
-.upgrade-item img {
-  width: 80px; 
-  height: auto; 
-  margin-right: 10px; 
+.background button {
+  border: 2px solid blue;
+  height: 25px;
+  border-radius: 20px;
+  font-weight: 600;
+  margin: 5px;
 }
-
-.upgrade-item .a {
-  text-wrap: wrap;
+/* Registration Page */
+.register-background {
+  background-color: #ADE0FF;
+  overflow: auto;
 }
-
-.login-container, .register-container {
-  background-color: #2c3e50;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
-  margin: 50px auto;
-  padding: 20px;
-  text-align: center;
+.register-form {
+  background-color: white;
+  color: black;
+  width: 48%;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid black;
+  padding-left: 20px;
+}
+.register-background h1 {
+  margin: 0;
+  padding-top: 20px;
+}
+.register-background input {
+  height: 45px;
+  width: 90%;
+  border: 2px solid black;
+}
+.register-background select {
+  height: 45px;
+  width: 90%;
+  border: 2px solid black;
+}
+.register-background textarea {
+  width: 90%;
+  height: 90px;
+  border: 2px solid black;
+}
+.register-background label {
+font-weight: 700;
+margin-top: 20px;
+margin-bottom: 7px;
+}
+.register-background button {
+  width: 40%;
+  background-color: #1F4BFF;
   color: white;
-}
-
-.login-container h1, .register-container h1 {
-  margin-bottom: 20px;
-}
-
-.flash-message {
-  background-color: #e74c3c;
-  padding: 10px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-  color: white;
-}
-
-.login-form label, .register-form label {
-  display: block;
-  margin-bottom: 5px;
-  text-align: left;
-  color: white;
-}
-
-.login-form input[type="email"],
-.login-form input[type="password"],
-.register-form input[type="text"],
-.register-form input[type="email"],
-.register-form input[type="password"] {
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin-bottom: 20px;
   border: none;
-  border-radius: 5px;
-}
-
-.login-form button, .register-form button {
-  background-color: #ecf0f1;
-  color: #2c3e50;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  display: block;
-  width: 100%;
-}
-
-.login-form button:hover, .register-form button:hover {
-  background-color: #bdc3c7;
-}
-
-p {
+  border-radius: 15px;
   margin-top: 20px;
+  margin-bottom: 20px;
+  height: 35px;
 }
-
-p a {
-  color: #ecf0f1;
-  text-decoration: none;
+.register-background form {
+  margin: 20px;
 }
-
-p a:hover {
-  text-decoration: underline;
+.register-background span, .background span {
+  font-style: italic;
+  margin-right: 60px;
+  color: gray;
 }
-
+.requirement {
+  margin-right: 10px;
+  text-align: end;
+}
+select:required:invalid, input:focus:invalid {
+  border-left: 3px solid red;
+}
 input:required:invalid, input:focus:invalid {
-  border: 2px solid red;
-  background-image: url('/images/invalid.png');
-  background-position: right top;
-  background-repeat: no-repeat;
+  border-left: 3px solid red;
 }
-
+textarea:required:invalid, input:focus:invalid {
+  border-left: 3px solid red;
+}
 input:required:valid {
-  border: 2px solid green;
-  background-image: url('/images/valid.png');
-  background-position: right top;
-  background-repeat: no-repeat;
+  border-left: 3px solid green;
+}
+select:required:valid {
+  border-left: 3px solid green;
+}
+textarea:required:valid {
+  border-left: 3px solid green;
+}
+.backgroundClassification {
+  width: 60%;
+  height: 60vh;
+  background-color: aqua;
+  display: flex;
+  justify-content: center;
 }
 
-@media (max-width: 768px) {
-  .content {
-    flex-direction: column;
-  }
+.backgroundClassification form {
+display: flex;
+  flex-direction: column;
+  width: 80%;
+  background-color: blue;
+  font-weight: 500;
+  color: white;
+  align-items: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+.backgroundClassification label {
+  align-self: flex-start;
+  margin-left: 30px;
+  margin-top: 15px;
+}
+.backgroundClassification input {
+ height: 45px;
+ width: 90%;
+}
+.backgroundClassification button {
+  border: 2px solid blue;
+  height: 25px;
+  border-radius: 20px;
+  font-weight: 600;
+  margin: 5px;
+}
 
-  .upgrades, .reviews {
-    flex: 1 1 100%; 
-  }
+/* InventoryForm CSS */
+.managementview a {
+  color: black;
+  padding-top: 10px;
+  font-size: 1.5rem;
+}
+.managementview  {
+  display: flex;
+  flex-direction: column;
+}
 
-  .upgrades {
-    grid-template-columns: 1fr; 
-    grid-template-rows: auto; 
+button:disabled {
+  background-color: aqua;
+}
+
+
+@media only screen and (min-width: 64rem) {
+  #background {
+    display: block;
   }
+  #background img{ 
+    width: 100%;
+  }
+  #for-large {
+    position: relative;
+    
+  }
+  #child{
+    position: absolute;
+    top: 15px;
+    z-index: 1;
+    background-color: white;
+    width: 70%;
+    margin-left: 200px;
+    padding: 30px;
+    border: 5px solid #1F4BFF ;
+    border-radius: 14px;
+  }
+  #parent-floater {
+    font-size: larger;
+  }
+  .large-grid {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+  }
+  .veh_det {
+    display: flex;
+  }
+  .align { 
+    align-content: center;
+    margin-right: 30px;
+  }
+  
+  
+  
 }

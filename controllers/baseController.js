@@ -1,22 +1,12 @@
-const utilities = require("../utilities/");
+const utilities = require("../utilities/")
+const baseController = {}
 
-const baseController = {};
-
-baseController.buildHome = async function(req, res) {
-  try {
-    let nav = await utilities.getNav();
-    res.render("index", {
-      title: "Home",
-      nav,
-    });
-  } catch (err) {
-    console.error('Error building home page', err);
-    res.status(500).render("errors/error", {
-      title: "Server Error",
-      message: "Oh no! There was a crash. Maybe try a different route?",
-      nav: [],
-    });
-  }
-};
+baseController.buildHome = async function(req, res){
+    console.log("Building home page");
+    const nav = await utilities.getNav()
+    console.log("Navigation generated");
+    req.flash("notice", "This is a flash message.")
+    res.render("index", {title: "Home", nav})
+}
 
 module.exports = baseController;

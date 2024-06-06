@@ -1,58 +1,52 @@
-
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Inventory</title>
-    <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-    <h1>Edit Inventory</h1>
-    <% if (flashMessage) { %>
-        <div class="flash-message"><%= flashMessage %></div>
+<%- messages() %>
+<% if (errors) { %>
+    <ul class="notice">
+        <% errors.array().forEach(error => { %>
+            <li><%= error.msg %></li>
+       <%  }) %>
+    </ul>
     <% } %>
-    <form action="/inv/update" method="post">
-        <label for="classificationList">Classification:</label>
-        <%= classificationList %>
+<div class="register-background">
+<form action="/vehicle/addinventory" method="post" class="register-form">
 
-        <label for="inv_make">Make:</label>
-        <input type="text" id="inv_make" name="inv_make" value="<%= inv_make %>" required>
+    <h1><%= title %></h1>
 
-        <label for="inv_model">Model:</label>
-        <input type="text" id="inv_model" name="inv_model" value="<%= inv_model %>" required>
+    <p class="requirement">ALL FIELDS ARE REQUIRED.</p>
 
-        <label for="inv_year">Year:</label>
-        <input type="number" id="inv_year" name="inv_year" value="<%= inv_year %>" required>
+    <label for="inv_make">Make</label>
+    <input type="text" name="inv_make" id="inv_make" required value="<%= locals.inv_make %>">
 
-        <label for="inv_description">Description:</label>
-        <textarea id="inv_description" name="inv_description" required><%= inv_description %></textarea>
+    <label for="inv_model">Model</label>
+    <input type="text" name="inv_model" id="inv_model" required value="<%= locals.inv_model %>">
 
-        <label for="inv_image">Image:</label>
-        <input type="text" id="inv_image" name="inv_image" value="<%= inv_image %>" required>
+    <label for="inv_description">Description</label>
+    <textarea name="inv_description" id="inv_description" required value="<%= locals.inv_description %>"></textarea>
 
-        <label for="inv_thumbnail">Thumbnail:</label>
-        <input type="text" id="inv_thumbnail" name="inv_thumbnail" value="<%= inv_thumbnail %>" required>
+    <label for="inv_image">Image Path</label>
+    <input type="text" name="inv_image" id="inv_image" required value="<%= locals.inv_image %>"> 
+    
+    <label for="inv_thumbnail">Image T Path</label>
+    <input type="text" name="inv_thumbnail" id="inv_thumbnail" required value="<%= locals.inv_thumbnail %>"> 
 
-        <label for="inv_price">Price:</label>
-        <input type="number" id="inv_price" name="inv_price" value="<%= inv_price %>" required>
+    <label for="inv_year">Year</label>
+    <input type="text" name="inv_year" id="inv_year" required pattern="^\d{4}$" value="<%= locals.inv_year %>">
 
-        <label for="inv_miles">Miles:</label>
-        <input type="number" id="inv_miles" name="inv_miles" value="<%= inv_miles %>" required>
+    <label for="inv_price">Price</label>
+    <input type="text" name="inv_price" id="inv_price" required pattern="^\d+$" value="<%= locals.inv_price %>">
 
-        <label for="inv_color">Color:</label>
-        <input type="text" id="inv_color" name="inv_color" value="<%= inv_color %>" required>
+    <label for="inv_miles">Miles</label>
+    <input type="text" name="inv_miles" id="inv_miles" required pattern="^\d+$" value="<%= locals.inv_miles %>">
 
-        <input type="hidden" name="inv_id" value="<%= inv_id %>">
-        <button type="submit">Update Inventory</button>
-    </form>
-    <% if (errors && errors.length > 0) { %>
-        <ul>
-            <% errors.forEach(error => { %>
-                <li><%= error.msg %></li>
-            <% }) %>
-        </ul>
-    <% } %>
-</body>
+    <label for="inv_color">Color</label>
+    <input type="text" name="inv_color" id="inv_color" required  value="<%= locals.inv_color %>">
+
+  
+    <%- classificationList %>
+
+    <button>Add</button>
+
+</form>
+</div>
 
 
 

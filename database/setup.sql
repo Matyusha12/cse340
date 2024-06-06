@@ -42,7 +42,6 @@ CREATE TABLE IF NOT EXISTS public.account (
 INSERT INTO public.classification (classification_name)
 VALUES ('Custom'), ('Sport'), ('SUV'), ('Truck'), ('Sedan');
 
--- Data for table `inventory`
 INSERT INTO public.inventory (
     inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color, classification_id
 )

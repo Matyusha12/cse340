@@ -10,20 +10,20 @@ const accountController = {};
 /* ****************************************
 *  Deliver login view
 * *************************************** */
-async function buildLogin(req, res, next) {
-    let nav = await utilities.getNav();
-    res.render("account/login", {
-      title: "Login",
-      nav,
-      errors: null, 
-      account_email: '', 
-    });
-}
+accountController.buildLogin = async function(req, res, next) {
+  let nav = await utilities.getNav();
+  res.render("account/login", {
+    title: "Login",
+    nav,
+    errors: null, 
+    account_email: '', 
+  });
+};
 
 /* ****************************************
 *  Deliver registration view
 * *************************************** */
-async function buildRegister(req, res, next) {
+accountController.buildRegister = async function(req, res, next) {
   let nav = await utilities.getNav();
   res.render("account/register", {
     title: "Register",
@@ -33,12 +33,12 @@ async function buildRegister(req, res, next) {
     account_lastname: '',
     account_email: '',
   });
-}
+};
 
 /* ****************************************
 *  Process Registration
 * *************************************** */
-async function registerAccount(req, res, next) {
+accountController.registerAccount = async function(req, res, next) {
   let nav = await utilities.getNav();
   const { account_firstname, account_lastname, account_email, account_password } = req.body;
 
@@ -66,7 +66,7 @@ async function registerAccount(req, res, next) {
     if (regResult) {
       req.flash(
         "notice",
-        `Congratulations, you\'re registered ${account_firstname}. Please log in.`
+        `Congratulations, you're registered ${account_firstname}. Please log in.`
       );
       res.status(201).render("account/login", {
         title: "Login",
@@ -97,12 +97,12 @@ async function registerAccount(req, res, next) {
       account_email,
     });
   }
-}
+};
 
 /* ****************************************
  *  Process login request
  * ************************************ */
-async function accountLogin(req, res) {
+accountController.accountLogin = async function(req, res) {
   let nav = await utilities.getNav();
   const { account_email, account_password } = req.body;
   const accountData = await accountModel.getAccountByEmail(account_email);
@@ -130,12 +130,12 @@ async function accountLogin(req, res) {
   } catch (error) {
    return new Error('Access Forbidden');
   }
-}
+};
 
 /* ****************************************
  *  Deliver account management view
  * ************************************ */
-async function buildManagement(req, res, next) {
+accountController.buildManagement = async function(req, res, next) {
   let nav = await utilities.getNav();
   res.render("account/management", {
     title: "Account Management",
@@ -145,9 +145,9 @@ async function buildManagement(req, res, next) {
     account_lastname: res.locals.accountData.account_lastname,
     account_email: res.locals.accountData.account_email
   });
-}
+};
 
-accountController.buildAccountManagement = async function (req, res, next) {
+accountController.buildAccountManagement = async function(req, res, next) {
   const nav = await utilities.getNav();
   res.render('account/account-management', {
     title: 'Account Management',
@@ -156,7 +156,7 @@ accountController.buildAccountManagement = async function (req, res, next) {
   });
 };
 
-accountController.buildAccountUpdateView = async function (req, res, next) {
+accountController.buildAccountUpdateView = async function(req, res, next) {
   const accountId = req.params.accountId;
   const accountData = await accountModel.getAccountById(accountId);
   const nav = await utilities.getNav();
@@ -168,7 +168,7 @@ accountController.buildAccountUpdateView = async function (req, res, next) {
   });
 };
 
-accountController.updateAccount = async function (req, res, next) {
+accountController.updateAccount = async function(req, res, next) {
   const { account_id, account_firstname, account_lastname, account_email } = req.body;
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -198,7 +198,7 @@ accountController.updateAccount = async function (req, res, next) {
   }
 };
 
-accountController.changePassword = async function (req, res, next) {
+accountController.changePassword = async function(req, res, next) {
   const { account_id, account_password } = req.body;
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -224,7 +224,7 @@ accountController.changePassword = async function (req, res, next) {
   }
 };
 
-accountController.logout = async function (req, res, next) {
+accountController.logout = async function(req, res, next) {
   res.clearCookie('jwt');
   res.redirect('/');
 };

@@ -1,59 +1,32 @@
-const express = require("express");
-const router = express.Router();
-const invController = require("../controllers/invController");
-const utilities = require("../utilities");
-const { body } = require('express-validator');
+const express = require("express")
+const router = new express.Router()
+const invController = require("../controllers/invController")
+const utilities = require("../utilities/index")
+const classValidate = require('../utilities/vm-validation')
 
 // Route to build inventory by classification view
-router.get("/type/:classificationId", invController.buildByClassificationId);
-router.get('/', invController.buildManagement);
-router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON));
+router.get("/type/:classificationId", invController.buildByClassificationId)
 
-// Route to display inventory detail
-router.get("/detail/:inventoryId", invController.displayInventoryDetail);
+// Route to build detail view for each vehicle
+router.get("/detail/:vehicle_inv_id", invController.buildByInvId)
 
-// Route to build add classification view and post classification
-router.get('/add-classification', invController.buildAddClassification);
-router.post('/add-classification', [
-    body('classification_name').isAlphanumeric().withMessage('Classification name must contain only letters and numbers.')
-], invController.addClassification);
+// Route used in JavaScript file
+router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
 
-// Route to build add inventory view and post inventory
-router.get('/add-inventory', invController.buildAddInventory);
-router.post('/add-inventory', [
-    body('classification_id').isNumeric().withMessage('Classification is required.'),
-    body('inv_make').notEmpty().withMessage('Make is required.'),
-    body('inv_model').notEmpty().withMessage('Model is required.'),
-    body('inv_year').isNumeric().withMessage('Year is required.'),
-    body('inv_description').notEmpty().withMessage('Description is required.'),
-    body('inv_image').notEmpty().withMessage('Image is required.'),
-    body('inv_thumbnail').notEmpty().withMessage('Thumbnail is required.'),
-    body('inv_price').isNumeric().withMessage('Price is required.'),
-    body('inv_miles').isNumeric().withMessage('Miles is required.'),
-    body('inv_color').notEmpty().withMessage('Color is required.')
-], invController.addInventory);
+// Route to deliver view for editing/updating an inventory item
+router.get("/edit/:inv_id", utilities.handleErrors(invController.buildInvItemUpdateForm))
 
-// Route to build edit inventory view
-router.get("/edit/:inv_id", utilities.handleErrors(invController.editInventoryView));
+// Route to process the updated form
+router.post("/update/", 
+    classValidate.addInventoryRules(),
+    classValidate.checkUpdateData,
+    utilities.handleErrors(invController.updateInventory))
 
-// Route to handle inventory update
-router.post("/update", [
-    body('classification_id').isNumeric().withMessage('Classification is required.'),
-    body('inv_make').notEmpty().withMessage('Make is required.'),
-    body('inv_model').notEmpty().withMessage('Model is required.'),
-    body('inv_year').isNumeric().withMessage('Year is required.'),
-    body('inv_description').notEmpty().withMessage('Description is required.'),
-    body('inv_image').notEmpty().withMessage('Image is required.'),
-    body('inv_thumbnail').notEmpty().withMessage('Thumbnail is required.'),
-    body('inv_price').isNumeric().withMessage('Price is required.'),
-    body('inv_miles').isNumeric().withMessage('Miles is required.'),
-    body('inv_color').notEmpty().withMessage('Color is required.')
-], utilities.handleErrors(invController.updateInventory));
+// Route to deliver the delete confirmation page
+router.get("/delete/:inv_id", utilities.handleErrors(invController.buildInvItemDeleteConfPage))
 
-// Route to build delete confirmation view
-router.get("/delete/:inv_id", utilities.handleErrors(invController.buildDeleteConfirmationView));
+// Route to process the deletion process
+router.post("/delete/", 
+    utilities.handleErrors(invController.deleteInventory))
 
-// Route to handle inventory delete
-router.post("/delete", utilities.handleErrors(invController.deleteInventory));
-
-module.exports = router;
+module.exports = router

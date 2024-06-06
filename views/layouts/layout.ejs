@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-    <%- include("../partials/header.ejs") %>
-    <%- include("../partials/navigation.ejs") %>
-<%- include("../partials/head.ejs") %>
-<body>
-    <div class="main-container">
-        
-   
-        <main>
-            <%- body %>
-        </main>
-   
-        <%- include("../partials/footer.ejs") %>
+  <%- include('../partials/head') %>
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <body>
+    <div id="for-large">
+      <div id="background">
+        <img src="/images/site/small_check.jpg" alt="" />
+      </div>
+      <div id="child">
+        <div id="wrapper">
+          <%- include('../partials/header') %> 
+          <%- include('../partials/navigation') %>
+    
+          <main><%- body %></main>
+          <%- include('../partials/footer') %>
+        </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>

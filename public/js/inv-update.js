@@ -1,5 +1,5 @@
-const form = document.querySelector("#updateForm");
-form.addEventListener("change", function () {
-  const updateBtn = document.querySelector("button");
-  updateBtn.removeAttribute("disabled");
-});
+const form = document.querySelector("#edit-form")
+    form.addEventListener("change", function () {
+        const updateBtn = document.querySelector("#upButton")
+        updateBtn.removeAttribute("disabled")
+    })
