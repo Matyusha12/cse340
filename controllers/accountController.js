@@ -1,5 +1,6 @@
 const utilities = require("../utilities");
 const accountModel = require('../models/account-model');
+const inventoryModel = require('../models/inventory-model'); // Добавьте это, если у вас есть inventory-model для работы с данными инвентаря
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -180,13 +181,15 @@ accountController.accountLogin = async function(req, res) {
 
 /* ****************************************
  *  Deliver account management view
- * ************************************ */
+ * *************************************** */
 accountController.buildManagement = async function(req, res, next) {
   let nav = await utilities.getNav();
-  res.render("account/management", {
+  let classificationList = await inventoryModel.getClassifications(); // Получите список классификаций
+  res.render("inventory/management", {
     title: "Account Management",
     nav,
     errors: [],
+    classificationList, // Передайте его в шаблон
     account_firstname: res.locals.accountData.account_firstname,
     account_lastname: res.locals.accountData.account_lastname,
     account_email: res.locals.accountData.account_email
@@ -195,19 +198,21 @@ accountController.buildManagement = async function(req, res, next) {
 
 /* ****************************************
  *  Deliver account management view (duplicate)
- * ************************************ */
+ * *************************************** */
 accountController.buildAccountManagement = async function(req, res, next) {
   const nav = await utilities.getNav();
-  res.render('account/account-management', {
+  let classificationList = await inventoryModel.getClassifications(); // Получите список классификаций
+  res.render('inventory/management', {
     title: 'Account Management',
     nav,
+    classificationList, // Передайте его в шаблон
     accountData: res.locals.accountData
   });
 };
 
 /* ****************************************
  *  Deliver update account view
- * ************************************ */
+ * *************************************** */
 accountController.buildAccountUpdateView = async function(req, res, next) {
   const accountId = req.params.accountId;
   const accountData = await accountModel.getAccountById(accountId);
@@ -222,7 +227,7 @@ accountController.buildAccountUpdateView = async function(req, res, next) {
 
 /* ****************************************
  *  Process account update
- * ************************************ */
+ * *************************************** */
 accountController.updateAccount = async function(req, res, next) {
   const { account_id, account_firstname, account_lastname, account_email } = req.body;
   const errors = validationResult(req);
@@ -255,7 +260,7 @@ accountController.updateAccount = async function(req, res, next) {
 
 /* ****************************************
  *  Process password change
- * ************************************ */
+ * *************************************** */
 accountController.changePassword = async function(req, res, next) {
   const { account_id, account_password } = req.body;
   const errors = validationResult(req);
@@ -284,7 +289,7 @@ accountController.changePassword = async function(req, res, next) {
 
 /* ****************************************
  *  Logout
- * ************************************ */
+ * *************************************** */
 accountController.logout = async function(req, res, next) {
   res.clearCookie('jwt');
   res.redirect('/');
