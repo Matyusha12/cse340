@@ -8,27 +8,27 @@ const { validationResult } = require('express-validator');
 const accountController = {};
 
 /* ****************************************
-*  Deliver login view
-* *************************************** */
+ *  Deliver login view
+ * *************************************** */
 accountController.buildLogin = async function(req, res, next) {
   let nav = await utilities.getNav();
   res.render("account/login", {
     title: "Login",
     nav,
-    errors: null, 
-    account_email: '', 
+    errors: [],
+    account_email: '',
   });
 };
 
 /* ****************************************
-*  Deliver registration view
-* *************************************** */
+ *  Deliver registration view
+ * *************************************** */
 accountController.buildRegister = async function(req, res, next) {
   let nav = await utilities.getNav();
   res.render("account/register", {
     title: "Register",
     nav,
-    errors: null,
+    errors: [],
     account_firstname: '',
     account_lastname: '',
     account_email: '',
@@ -36,8 +36,8 @@ accountController.buildRegister = async function(req, res, next) {
 };
 
 /* ****************************************
-*  Process Registration
-* *************************************** */
+ *  Process Registration
+ * *************************************** */
 accountController.registerAccount = async function(req, res, next) {
   let nav = await utilities.getNav();
   const { account_firstname, account_lastname, account_email, account_password } = req.body;
@@ -48,10 +48,13 @@ accountController.registerAccount = async function(req, res, next) {
     hashedPassword = await bcrypt.hashSync(account_password, 10);
   } catch (error) {
     req.flash("notice", 'Sorry, there was an error processing the registration.');
-    res.status(500).render("account/register", {
-      title: "Registration",
+    return res.status(500).render("account/register", {
+      title: "Register",
       nav,
-      errors: null,
+      errors: [],
+      account_firstname,
+      account_lastname,
+      account_email,
     });
   }
 
@@ -68,18 +71,18 @@ accountController.registerAccount = async function(req, res, next) {
         "notice",
         `Congratulations, you're registered ${account_firstname}. Please log in.`
       );
-      res.status(201).render("account/login", {
+      return res.status(201).render("account/login", {
         title: "Login",
         nav,
-        errors: null,
+        errors: [],
         account_email: '', 
       });
     } else {
       req.flash("notice", "Sorry, the registration failed.");
-      res.status(501).render("account/register", {
-        title: "Registration",
+      return res.status(501).render("account/register", {
+        title: "Register",
         nav,
-        errors: [], 
+        errors: [],
         account_firstname,
         account_lastname,
         account_email,
@@ -88,10 +91,10 @@ accountController.registerAccount = async function(req, res, next) {
   } catch (error) {
     console.error("Registration error:", error);
     req.flash("notice", "Sorry, there was an error processing your registration.");
-    res.status(500).render("account/register", {
-      title: "Registration",
+    return res.status(500).render("account/register", {
+      title: "Register",
       nav,
-      errors: [], 
+      errors: [],
       account_firstname,
       account_lastname,
       account_email,
@@ -103,32 +106,75 @@ accountController.registerAccount = async function(req, res, next) {
  *  Process login request
  * ************************************ */
 accountController.accountLogin = async function(req, res) {
+  console.log("Login process started");
   let nav = await utilities.getNav();
   const { account_email, account_password } = req.body;
-  const accountData = await accountModel.getAccountByEmail(account_email);
-  if (!accountData) {
-   req.flash("notice", "Please check your credentials and try again.");
-   res.status(400).render("account/login", {
-    title: "Login",
-    nav,
-    errors: null,
-    account_email,
-   });
-  return;
+  console.log("Received email:", account_email);
+  
+  // Проверка на наличие ошибок валидации
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log("Validation errors:", errors.array());
+    return res.status(400).render("account/login", {
+      title: "Login",
+      nav,
+      errors: errors.array(),
+      account_email,
+    });
   }
+
+  // Проверка, что поля не пустые
+  if (!account_email || !account_password) {
+    console.log("Email or password is missing");
+    req.flash("notice", "Email and password are required.");
+    return res.status(400).render("account/login", {
+      title: "Login",
+      nav,
+      errors: [{ msg: "Email and password are required." }],
+      account_email,
+    });
+  }
+
+  const accountData = await accountModel.getAccountByEmail(account_email);
+  console.log("Account data retrieved:", accountData);
+  if (!accountData || !accountData.account_password) {
+    req.flash("notice", "Please check your credentials and try again.");
+    return res.status(400).render("account/login", {
+      title: "Login",
+      nav,
+      errors: [{ msg: "Please check your credentials and try again." }],
+      account_email,
+    });
+  }
+
   try {
-   if (await bcrypt.compare(account_password, accountData.account_password)) {
-   delete accountData.account_password;
-   const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 });
-   if(process.env.NODE_ENV === 'development') {
-     res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
-     } else {
-       res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 });
-     }
-   return res.redirect("/account/");
-   }
+    const passwordMatch = await bcrypt.compare(account_password, accountData.account_password);
+    if (passwordMatch) {
+      console.log("Password matched");
+      delete accountData.account_password;
+      const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+      console.log("Token generated");
+      res.cookie("jwt", accessToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 3600 * 1000 });
+      return res.redirect("/account/");
+    } else {
+      console.log("Password did not match");
+      req.flash("notice", "Please check your credentials and try again.");
+      return res.status(400).render("account/login", {
+        title: "Login",
+        nav,
+        errors: [{ msg: "Please check your credentials and try again." }],
+        account_email,
+      });
+    }
   } catch (error) {
-   return new Error('Access Forbidden');
+    console.error("Login error:", error);
+    req.flash("notice", "Sorry, there was an error processing your login.");
+    return res.status(500).render("account/login", {
+      title: "Login",
+      nav,
+      errors: [{ msg: "Sorry, there was an error processing your login." }],
+      account_email,
+    });
   }
 };
 
@@ -140,13 +186,16 @@ accountController.buildManagement = async function(req, res, next) {
   res.render("account/management", {
     title: "Account Management",
     nav,
-    errors: null,
+    errors: [],
     account_firstname: res.locals.accountData.account_firstname,
     account_lastname: res.locals.accountData.account_lastname,
     account_email: res.locals.accountData.account_email
   });
 };
 
+/* ****************************************
+ *  Deliver account management view (duplicate)
+ * ************************************ */
 accountController.buildAccountManagement = async function(req, res, next) {
   const nav = await utilities.getNav();
   res.render('account/account-management', {
@@ -156,6 +205,9 @@ accountController.buildAccountManagement = async function(req, res, next) {
   });
 };
 
+/* ****************************************
+ *  Deliver update account view
+ * ************************************ */
 accountController.buildAccountUpdateView = async function(req, res, next) {
   const accountId = req.params.accountId;
   const accountData = await accountModel.getAccountById(accountId);
@@ -163,11 +215,14 @@ accountController.buildAccountUpdateView = async function(req, res, next) {
   res.render('account/update-account', {
     title: 'Update Account Information',
     nav,
-    errors: null,
+    errors: [],
     accountData
   });
 };
 
+/* ****************************************
+ *  Process account update
+ * ************************************ */
 accountController.updateAccount = async function(req, res, next) {
   const { account_id, account_firstname, account_lastname, account_email } = req.body;
   const errors = validationResult(req);
@@ -198,6 +253,9 @@ accountController.updateAccount = async function(req, res, next) {
   }
 };
 
+/* ****************************************
+ *  Process password change
+ * ************************************ */
 accountController.changePassword = async function(req, res, next) {
   const { account_id, account_password } = req.body;
   const errors = validationResult(req);
@@ -224,6 +282,9 @@ accountController.changePassword = async function(req, res, next) {
   }
 };
 
+/* ****************************************
+ *  Logout
+ * ************************************ */
 accountController.logout = async function(req, res, next) {
   res.clearCookie('jwt');
   res.redirect('/');

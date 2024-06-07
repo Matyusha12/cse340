@@ -2,6 +2,7 @@ const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const env = require("dotenv").config();
 const app = express();
+const orderRoute = require('./routes/orderRoute');
 const staticRoutes = require("./routes/static");
 const baseController = require("./controllers/baseController");
 const inventoryRoute = require("./routes/inventoryRoute");
@@ -58,6 +59,8 @@ app.use("/inv", inventoryRoute);
 
 // Account routes
 app.use("/account", accountRoute); 
+
+app.use('/orders', orderRoute);
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {

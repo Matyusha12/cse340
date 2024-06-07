@@ -1,21 +1,32 @@
 
-<h1><%- title %></h1>
-<%- messages() %>
-<% if (errors) { %>
-    <ul class="notice">
-        <% errors.array().forEach(error => { %>
-            <li><%= error.msg %></li>
-       <%  }) %>
-    </ul>
-    <% } %>
-<div class="background">
-<form action="/account/login" method="post" id="loginForm">
-    <label for="account_email">Username: </label> 
-    <input type="email" name="account_email" id="account_email" required value="<%= locals.account_email %>">
-    <label for="account_password" >Password</label> 
-    <span>  Passwords must be a minimum of 12 characters and include 1 capital letter, 1 number and 1 special character.</span>
-    <input type="password" name="account_password" id="account_password" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s)(.{12,}$)"> 
-    <button id="dOMButton">Login</button>
-    <div>No account? <a href="/account/register">Register</a></div>
-</form>
-</div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> | CSE 340 App</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <main>
+        <h1><%= title %></h1>
+        <%- messages() %>
+        <% if (errors.length > 0) { %>
+            <ul class="notice">
+                <% errors.forEach(error => { %>
+                    <li><%= error.msg %></li>
+                <% }) %>
+            </ul>
+        <% } %>
+        <div class="background">
+            <form action="/account/login" method="post" id="loginForm">
+                <label for="account_email">Username: </label> 
+                <input type="email" name="account_email" id="account_email" required value="<%= account_email %>">
+                <label for="account_password">Password</label> 
+                <span>Passwords must be a minimum of 12 characters and include 1 capital letter, 1 number and 1 special character.</span>
+                <input type="password" name="account_password" id="account_password" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s)(.{12,}$)"> 
+                <button id="dOMButton">Login</button>
+                <div>No account? <a href="/account/register">Register</a></div>
+            </form>
+        </div>
+    </main>
+    <%- include('../partials/footer') %>
+</body>
